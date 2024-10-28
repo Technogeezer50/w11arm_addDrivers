@@ -74,7 +74,7 @@ w11arm_addDrivers is primarily designed for Windows 11 ARM ISOs that do not cont
 - Parallels Desktop
 - Any future "consumer" Windows 11 ARM ISO that Microsoft may make available from its websites.
 
-> [!WARNING]
+> [!CAUTION]
 > w11arm_addDrivers is not needed and should not be used on Windows 11 x64 (Intel/AMD 64-bit) ISOs. These ISOs already contain
 > the appropriate drivers for VMware hypervisor products that run on Intel/AMD CPUs and operating systems.
 
