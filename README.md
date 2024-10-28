@@ -3,8 +3,8 @@
 ## What is w11arm_addDrivers?
 
 w11arm_addDrivers is a utility that "remasters" a Windows 11 ARM installation ISO.
-It will inject the VMware vmxnet3 virtual network drivers into a copy of the ISO, creating
-a new ISO that can be used to more easily create VMware Fusion virtual machines.
+It will add the VMware vmxnet3 virtual network drivers that Microsoft doesn't provide into a copy of the ISO.
+This new ISO can be used to more easily create Windows 11 ARM virtual machines on VMware Fusion. 
 
 Windows 11 ARM ISOs created by tools other than VMware Fusion's "Get Windows from Microsoft" or vmw_esd2iso
 tools do not include the VMware vmxnet3 netwok drivers. This causes a problem during the Windows out-of-box
