@@ -7,7 +7,7 @@ w11arm_addDrivers is a utility that rebuilds an existing Windows 11 ARM installa
 ## Why is it useful?
 
 Windows 11 ARM ISOs created by tools other than VMware Fusion's "Get Windows from Microsoft" or vmw_esd2iso do not have a driver for
-the VMware vmxnet3 virtual NIC that's presented to the VM. No driver, no network.
+the VMware vmxnet3 virtual NIC that's presented by a VMware Fusion VM. No driver, no network.
  
 The Windows out-of-box experience (OOBE) is expecting to have network connectivity to complete a Windows installation. Since a
 network isn't present, the OOBE stalls and continues to ask for a network connection. 
