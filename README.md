@@ -61,8 +61,6 @@ after the re-mastered ISO is created.
 w11arm_addDriver will check for at least 12 GB of free space in the file system containing the current working directory. It will
 exit before doing anythning if it estimates it will run out of space during the re-mastering process.
 
-It will check for at least 12 GB of available disk space in the current working directory before doing anything
-
 ### Who should use this?
 
 Most users wanting to install a Windows 11 ARM VM in VMware Fusion should use Fusion's built-in tools to download the installation ISO. 
