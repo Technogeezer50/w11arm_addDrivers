@@ -15,7 +15,7 @@
 # 
 
 
-readonly versionID="v1.0.0 (20241027)"
+readonly versionID="v1.0.0b2 (20241115)"
 readonly version="w11arm_addDrivers ${versionID}\n"
 readonly minDiskSpace=12
 
@@ -27,6 +27,8 @@ declare isoOutFile
 declare isoMountFolder
 declare retVal
 declare elToritoBootFile
+declare isoVolName
+declare isoImageFolder
 
 usage() {
 	echo -e "Usage:\n"
@@ -62,18 +64,19 @@ copyDrivers() {
 		return $retVal
 	fi
 	echo -e "Copying vmxnet3 driver from Tools ISO to imaging folder"
-	if [[ ! -d "${wDir}/ESD_ISO/\$WinPEDriver\$" ]] ; then
-		mkdir "${wDir}/ESD_ISO/\$WinPEDriver\$"
+	if [[ ! -d "${isoImageFolder}/\$WinPEDriver\$" ]] ; then
+		mkdir "${isoImageFolder}/\$WinPEDriver\$"
 	fi
-	ditto -v "/Volumes/VMware Tools/vmxnet3" "${wDir}/\$WinPEDriver\$/vmxnet3"
+	ditto -v "/Volumes/VMware Tools/vmxnet3" "${isoImageFolder}/\$WinPEDriver\$/vmxnet3"
 	retVal=$?
 	if (( ${retVal} != 0 )); then
 		reportError "Driver copy failed, error code ${retVal}"
 	fi
-	chmod -R u+w "${wDir}/\$WinPEDriver\$/vmxnet3"
+	ls -alR "${isoImageFolder}/\$WinPEDriver\$/vmxnet3"
+	chmod -R u+w "${isoImageFolder}/\$WinPEDriver\$/vmxnet3"
 	echo -e "Dismounting VMware Tools ISO"
 	hdiutil detach "/Volumes/VMware Tools"
-	return $retVal
+	return ${retVal}
 }
 
 copyIso2Workdir(){
@@ -87,13 +90,15 @@ copyIso2Workdir(){
 	fi
 	isoMountFolder=$(cat "${wDir}/attachMsIso.log" | sed -e 's:.*/Volumes:/Volumes:' )
 	if [[ -f "${isoMountFolder}/setup.exe" ]]; then
-	
+		isoVolName=$(basename "${isoMountFolder}")
+		isoImageFolder="${wDir}/${isoVolName}"
 		echo -e "Copying ISO contents to imaging folder"
-		ditto -v "${isoMountFolder}" "${wDir}/ESD_ISO"
+		ditto -v "${isoMountFolder}" "${isoImageFolder}"
 		retVal=$?
 		if (( ${retVal} != 0 )); then
 			reportError "ISO copy failed, error code ${retVal}"
 		fi
+		chmod -R u+w "${isoImageFolder}"
 	else
 		reportError "setup.exe doesn't exist in ISO, this may not be a Windows ISO file'"
 	fi
@@ -109,7 +114,7 @@ buildIso(){
 		echo "${isoOutFile} already exists, deleting it"
 		rm -rf "${isoOutFile}"
 	fi
-    elToritoBootFile="${wDir}/ESD_ISO/efi/microsoft/boot/efisys.bin"
+    elToritoBootFile="${isoImageFolder}/efi/microsoft/boot/efisys.bin"
 	
 	#
 	# Experimental - change the efisys.bin file to eliminate the 
@@ -117,7 +122,7 @@ buildIso(){
 	# message
 	
 	(
-		cd "${wDir}/ESD_ISO/efi/microsoft/boot"
+		cd "${isoImageFolder}/efi/microsoft/boot"
 		mv efisys.bin efisys_prompt.bin
 		mv efisys_noprompt.bin efisys.bin
 	)
@@ -125,7 +130,7 @@ buildIso(){
 	# Create the ISO file
 	#
 
-	hdiutil makehybrid -o "${isoOutFile}" -iso -udf -udf-volume-name W11_ESD_VMWARE -hard-disk-boot -eltorito-boot "$elToritoBootFile" "${wDir}/ESD_ISO"
+	hdiutil makehybrid -o "${isoOutFile}" -iso -udf -udf-volume-name "${isoVolName}" -hard-disk-boot -eltorito-boot "$elToritoBootFile" "${isoImageFolder}"
 	retVal=$?
 	if (( ${retVal} != 0 )); then
 		reportError "ISO build failed, error code ${retVal}"
