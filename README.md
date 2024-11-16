@@ -64,7 +64,7 @@ exit before doing anythning if it estimates it will run out of space during the 
 ### Who should use this?
 
 Most users wanting to install a Windows 11 ARM VM in VMware Fusion should use Fusion's built-in tools to download the installation ISO. 
-Fusion's built-in tools download the latest stable chaneel installation ESD from
+Fusion's built-in tools download the latest general availablitity channel ESD from
 Microsoft, add the VMware network driver, and create the ISO.
 
 w11arm_addDrivers is primarily designed for users that have Windows 11 ARM ISOs from other sources such as:
