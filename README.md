@@ -48,7 +48,7 @@ the .zip or .tar.gz format file.
 * Change permissions on w11arm_addDrivers to make it executable (it does not require root permissions).
 * Run w11arm_addDrivers.
 
-## Changes in V1.0.0
+## Changes in V1.1.0
 
 ### Update to VMware Fusion requirements.
 
