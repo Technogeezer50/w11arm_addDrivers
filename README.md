@@ -55,10 +55,12 @@ the .zip or .tar.gz format file.
 Version 1.1.0 requires that the Mac has VMware Fusion 26H1 or later installed. 
 
 Previous versions of w11arm_addDriver assumed that the VMware virtual device drivers were found
-ina folder on the VMware Tools installation ISO bundled with Fusion. The version of VMware
-Tools found in Fusion 26H1 and later changed its packaging so that the methods previously
-used to install the VMware drivers no longer work. w11arm_addDriver has been changed
-to use a zip file for the drivers that is found in the application bundle of VMware Fusion 26H1 and later. 
+in a folder on the VMware Tools installation ISO that was bundled with Fusion. VMware
+Tools 13.0.0 and later (now bundled with Fusion) changed its packaging so this folder no longer exists. 
+
+To support the "Get Windows from Microsoft" feature in Fusion, Broadcom added a zip file within the Fusion 26H1 (and later) application bundle
+that contains the virtual device drivers in a format that can be injected into an ISO. w11arm_addDriver has been changed to use 
+this zip file as the source of the network driver instead of accessing a VMware Tools installation ISO. 
 
 ### The -x option will remove the "Press any key to boot from CD/DVD" messages.
 
