@@ -15,25 +15,27 @@
 # 
 
 
-readonly versionID="v1.0.0b2 (20241115)"
+readonly versionID="v1.1.0 (20260908)"
 readonly version="w11arm_addDrivers ${versionID}\n"
 readonly minDiskSpace=12
 
 declare msISO
 declare tempDir="."
 declare fusionApp="/Applications/VMware Fusion.app"
-declare toolsIso="${fusionApp}/Contents/Library/isoimages/arm64/windows.iso"
+declare driverZipfile="${fusionApp}/Contents/Library/isoimages/arm64/drivers-arm64.zip"
 declare isoOutFile
 declare isoMountFolder
 declare retVal
 declare elToritoBootFile
 declare isoVolName
 declare isoImageFolder
+declare noCdPrompt=0
 
 usage() {
 	echo -e "Usage:\n"
 	echo -e "$0 [-Vh] windows11-iso-file"
 	echo -e "\nOptions:"
+	echo -e "\t-x\tRemove 'Press any key' prmmpt from ISO (experimental)"
 	echo -e "\t-h\tPrint usage and exit"
 	echo -e "\t-V\tPrint program version and exit"
 	echo
@@ -56,26 +58,19 @@ programAbort() {
 	exit $errCode
 }
 copyDrivers() {
-	echo -e "Mounting VMware Tools iso"
-	hdiutil attach "${toolsIso}"
-	retVal=$?
-	if (( ${retVal} != 0 )); then
-		reportError "VMware Tools ISO mount failed, error code ${retVal}"
-		return $retVal
-	fi
-	echo -e "Copying vmxnet3 driver from Tools ISO to imaging folder"
+	echo -e "Extracting vmxnet3 driver from Fusion application bundle"
 	if [[ ! -d "${isoImageFolder}/\$WinPEDriver\$" ]] ; then
-		mkdir "${isoImageFolder}/\$WinPEDriver\$"
+	   mkdir "${isoImageFolder}/\$WinPEDriver\$"
 	fi
-	ditto -v "/Volumes/VMware Tools/vmxnet3" "${isoImageFolder}/\$WinPEDriver\$/vmxnet3"
-	retVal=$?
+    unzip "${driverZipfile}" "vmxnet3/**/*" -d "${isoImageFolder}/\$WinPEDriver\$"
+    retVal=$?
 	if (( ${retVal} != 0 )); then
-		reportError "Driver copy failed, error code ${retVal}"
+		reportError "Driver extraction failed, error code ${retVal}"
+	else
+	     ls -alR "${isoImageFolder}/\$WinPEDriver\$/vmxnet3"
+	     chmod -R u+w "${isoImageFolder}/\$WinPEDriver\$/vmxnet3"
+	     retVal=0
 	fi
-	ls -alR "${isoImageFolder}/\$WinPEDriver\$/vmxnet3"
-	chmod -R u+w "${isoImageFolder}/\$WinPEDriver\$/vmxnet3"
-	echo -e "Dismounting VMware Tools ISO"
-	hdiutil detach "/Volumes/VMware Tools"
 	return ${retVal}
 }
 
@@ -120,12 +115,14 @@ buildIso(){
 	# Experimental - change the efisys.bin file to eliminate the 
 	# annoying "Press any key to boot from CD or DVD"
 	# message
-	
-	(
-		cd "${isoImageFolder}/efi/microsoft/boot"
-		mv efisys.bin efisys_prompt.bin
-		mv efisys_noprompt.bin efisys.bin
-	)
+	if (( ${noCdPrompt} == 1 )); then 
+		( cd "${isoImageFolder}/efi/microsoft/boot"
+		  mv efisys.bin efisys_prompt.bin
+		  mv efisys_noprompt.bin efisys.bin
+		  mv cdboot.efi cdboot_prompt.efi
+		  mv cdboot_noprompt.efi cdboot.efi
+		)
+	fi
 	#
 	# Create the ISO file
 	#
@@ -153,7 +150,7 @@ buildIso(){
 # 
 #-------------------
 
-while getopts "hV" opt; do
+while getopts "xhV" opt; do
   case ${opt} in
     h)
 		usage
@@ -163,7 +160,9 @@ while getopts "hV" opt; do
     	echo -e $version
     	exit 1
     	;;
-    
+    x)
+    	noCdPrompt=1
+    	;;
     \?)
     	reportError "Invalid option: -$OPTARG"
     	usage
@@ -198,6 +197,11 @@ fi
 	
 if [[ ! -d "${fusionApp}" ]]; then
 	reportError "Fusion app not installed"
+	exit 1
+fi
+
+if [[ ! -f "${driverZipfile}" ]]; then
+	reportError "Fusion 26H1 or later is required but not installed"
 	exit 1
 fi
 

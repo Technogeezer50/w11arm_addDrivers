@@ -23,8 +23,8 @@ The ISO will boot directly into the Windows setup without any further interventi
 
 ## Prerequisites 
 
-* Apple Silicon Macs running macOS 13 or later.
-* VMware Fusion 13.5 or later must be installed and located at /Applications/VMware Fusion.app.
+* Apple Silicon Macs running macOS 15 Sequoia or later.
+* VMware Fusion 26H1 or later must be installed in its default location (/Applications/VMware Fusion.app).
 * A Windows 11 ARM installation ISO file (from UUPdump, CrystalFetch, or some other source).
 
 ## Usage
@@ -33,6 +33,7 @@ The ISO will boot directly into the Windows setup without any further interventi
 w11arm_addDrivers [-hV] path-to-Windows11-ISO-file
 
 Options:
+	-x			Disable "Press any key to boot" message in generated ISO (Experimental)
 	-V			Print version of utility and exit
 	-h			Print usage (help) information and exit
 ```
@@ -49,6 +50,36 @@ the .zip or .tar.gz format file.
 * Run w11arm_addDrivers.
 
 ## Notes
+
+## Update to VMware Fusion requirements.
+
+Version 1.1.0 requires that the Mac has VMware Fusion 26H1 or later installed. 
+
+Previous versions of w11arm_addDriver assumed that the VMware virtual device drivers were found
+ina folder on the VMware Tools installation ISO bundled with Fusion. The version of VMware
+Tools found in Fusion 26H1 and later changed its packaging so that the methods previously
+used to install the VMware drivers no longer work. w11arm_addDriver has been changed
+to use a zip file for the drivers that is found in the application bundle of VMware Fusion 26H1 and later. 
+
+## The -x option will remove the "Press any key to boot from CD/DVD" messages.
+
+The default behavior of w11arm_addDriver is to keep the default behavior of Microsoft ISO media that
+* displays the  "Press any key to boot from CD/DVD" message and 
+* requires a key to be pressed 
+in order to complete the boot of the ISO media into Windows Setup. 
+
+The -x option has been added to change this behavior. Using the option changes the EFI boot files
+in the generated ISO. It replaces the default files with alternatives already present in the
+Microsoft ISO that do not display the message. The generated ISO will boot directly into Windows
+Setup without user intervention. 
+
+> [!CAUTION]
+> Any ISO media created with this option should be removed or ejected from the system once Windows
+> installation has completed. This avoids the possibility that a system restart could boot into
+> Windows Setup if your CD/DVD drive is configured in the EFI firmware's boot order settings
+> to be booted before the hard drive. 
+
+This option is considered experimental.
 
 ### Disk space rqquirements
 
@@ -90,7 +121,7 @@ Please report any bugs as an issue in w11arm_addDriver's repository on GitHub.
 
 ## Licensing
 
-w11arm_addDrivers is Copyright (C) 2024 Paul Rockwell.
+w11arm_addDrivers is Copyright (C) 2024 - 2026 Paul Rockwell.
 
 You may freely use and modify this utility for use in your own projects. If you do modify w11arm_addDrivers, please provide attribution,
 and offer it with the same freedom to use as I've offered it you.
