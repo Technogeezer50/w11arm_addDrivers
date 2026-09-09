@@ -30,7 +30,7 @@ The ISO will boot directly into the Windows setup without any further interventi
 ## Usage
 
 ```
-w11arm_addDrivers [-hV] path-to-Windows11-ISO-file
+w11arm_addDrivers [-hVx] path-to-Windows11-ISO-file
 
 Options:
 	-x			Disable "Press any key to boot" message in generated ISO (Experimental)
