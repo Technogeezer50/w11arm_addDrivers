@@ -48,7 +48,7 @@ the .zip or .tar.gz format file.
 * Change permissions on w11arm_addDrivers to make it executable (it does not require root permissions).
 * Run w11arm_addDrivers.
 
-## Notes
+## Changes in V1.0.0
 
 ### Update to VMware Fusion requirements.
 
@@ -82,6 +82,8 @@ Setup without user intervention.
 > to be booted before the hard drive. 
 
 This option is considered experimental.
+
+## Notes
 
 ### Disk space requirements
 
