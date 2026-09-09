@@ -59,8 +59,8 @@ in a folder on the VMware Tools installation ISO that was bundled with Fusion. V
 Tools 13.0.0 and later (now bundled with Fusion) changed its packaging so this folder no longer exists. 
 
 To support the "Get Windows from Microsoft" feature in Fusion, Broadcom added a zip file within the Fusion 26H1 (and later) application bundle
-that contains the virtual device drivers in a format that can be injected into an ISO. w11arm_addDriver has been changed to use 
-this zip file as the source of the network driver instead of accessing a VMware Tools installation ISO. 
+that contains the VMware virtual device drivers. w11arm_addDriver has been changed to use 
+this zip file as the source of the network driver it inserts into the new ISO. 
 
 ### The -x option will remove the "Press any key to boot from CD/DVD" messages.
 
