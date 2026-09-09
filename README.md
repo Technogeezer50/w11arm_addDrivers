@@ -50,7 +50,7 @@ the .zip or .tar.gz format file.
 
 ## Notes
 
-## Update to VMware Fusion requirements.
+### Update to VMware Fusion requirements.
 
 Version 1.1.0 requires that the Mac has VMware Fusion 26H1 or later installed. 
 
@@ -60,7 +60,7 @@ Tools found in Fusion 26H1 and later changed its packaging so that the methods p
 used to install the VMware drivers no longer work. w11arm_addDriver has been changed
 to use a zip file for the drivers that is found in the application bundle of VMware Fusion 26H1 and later. 
 
-## The -x option will remove the "Press any key to boot from CD/DVD" messages.
+### The -x option will remove the "Press any key to boot from CD/DVD" messages.
 
 The default behavior of w11arm_addDriver is to keep the default behavior of Microsoft ISO media that
 * displays the  "Press any key to boot from CD/DVD" message and 
