@@ -52,7 +52,8 @@ the .zip or .tar.gz format file.
 
 ### Update to VMware Fusion requirements.
 
-Version 1.1.0 requires that the Mac has VMware Fusion 26H1 or later installed. 
+Version 1.1.0 requires that the Mac has VMware Fusion 26H1 or later installed. Users of Fusion versions prior to 
+26H1 should continue to use the version 1.0.0b release that remains available.
 
 Previous versions of w11arm_addDriver assumed that the VMware virtual device drivers were found
 in a folder on the VMware Tools installation ISO that was bundled with Fusion. VMware
