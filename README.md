@@ -80,7 +80,7 @@ Setup without user intervention.
 
 This option is considered experimental.
 
-### Disk space rqquirements
+### Disk space requirements
 
 w11arm_addDriver creates the new ISO and a temporary imaging folder in the current working directory.
 
